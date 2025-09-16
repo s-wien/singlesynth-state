@@ -1,4 +1,4 @@
-# Augmented synthetic control analysis and report for single treatment
+# Augmented synthetic control analysis, single state policy
 
 ## Last updated September 15, 2025
 
