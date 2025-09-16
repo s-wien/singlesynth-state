@@ -8,7 +8,7 @@ This repository provides code and sample data to estimate the effect of single s
 
 For the purposes of speed and privacy, synthetic sample data prepared to be be used by the [`augsynth`](https://github.com/ebenmichael/augsynth) is provided (i.e., data have been prepared to begin the analysis at `08-run-singlesynth.R`). 
 
-**All results are generated using synthetic data, results do not reflect real trends and are for educational purposes only.**
+**All results are generated using synthetic data: results do not reflect real trends and are for educational purposes only.**
 
 # Instructions
 
