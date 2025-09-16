@@ -16,7 +16,7 @@ To run the analysis and generate a report:
 
 1.  Check out or download the repository
 2.  In RStudio's Terminal, navigate to the appropriate home directory
-3.  In Terminal, enter `make singlesynth` to run the augmented synthetic control method, diagnostics, and generate the report
+3.  In Terminal, enter `make clean` to remove the results, then `make clean` to run the augmented synthetic control method, diagnostics, and generate the report
 4.  Results for each exposure-outcome combination will appear in the newly created `tables` and `figures` folders
 5.  To clean results and re-run the analysis, in Terminal enter `make clean` and then `make singlesynth`
 
@@ -24,24 +24,9 @@ To run the analysis and generate a report:
 
 This repository contains the following:
 
-1.  `code/`: this contains code assuming individual-level birth and fetal death data (e.g., NVSS vital records) at the begnning of the analysis  
-  - `00-name-fake-synth-data` renames the synthetic data
-  - `01-make-conception` calculates estimated calendar date for date of conception and date of gestational age at 6 weeks
-  - `02-make-cohort` applies cohort inclusion and exclusion criteria
-  - `03-` to `05-` creates exposure, outcome, and covariate variables
-  - `06-make-synth-data` aggregates data by treatment, state, month, and time-varying confoudners; calculates monthly outcome rates
-  - `07-prepare-singlesynth` restricts post-treatment time due to exposure definitions
-  - `08-run-singlesynth` runs the `augsynth` package for each combination of exposure and outcome
-  - `09-` to `14-` run augmented synthetic control diagnostics
-  - `15-make-outcome-trend-plots` creates outcome trend plots
-  - `render-report` renders the `report.qmd` file
-  
-2.  `data/`: includes synthetic data for two different exposure definitions and data for FIPS codes 
-3.  `figures/`: will contain pre-made plots describing the two different exposures used in this analysis 
+1.  `code/`: code to rename synthetic data, prepare data for the `augsynth` package, run ASCM diagnostics, and generate a report; assumes individual-level birth and fetal death data (e.g., NVSS vital records) at the begnning of the analysis
+2.  `data/`: includes synthetic data for two different exposure definitions, data for FIPS codes, and `augsynth` objects 
+3.  `figures/`: contains plots describing exposure definitions, gap plots, synthetic weight plots and outcome trend plots
+4.  `tables/`: contains ATTs and diagnostic statistics
+5.  `report/`: contains an `.html` report that sumarizing select results 
 4.  `Makefile`: this file is used to run analyses starting at `08-run-singlesynth.R` and to clean output
-
-At the end of the analyses, you should have the following:
-
-1.  `tables/`: will contain ATTs and diagnostic statistics
-2.  `figures/`: will contain additional files containing gap plots and outcome trend plots
-3.  `report/`: will contain an `.html` report that summarizes select results 
