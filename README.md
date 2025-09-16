@@ -26,30 +26,30 @@ This repository contains the following:
 
 1.  `code/`
 
--   Renames synthetic data
--   Prepares data for the `augsynth` package
--   Runs ASCM diagnostics
--   Generates a report
--   Code `01-07` assumes individual-level birth and fetal death data (e.g., NVSS vital records)
--   Code `08-15` assumes data aggregated by treatment, time, and state
+-   renames synthetic data
+-   prepares data for the `augsynth` package
+-   runs ASCM diagnostics
+-   generates a report
+-   code `01-07` assumes individual-level birth and fetal death data (e.g., NVSS vital records)
+-   code `08-15` assumes data aggregated by treatment, time, and state
 
 2.  `data/`
 
--   Synthetic data for two different exposure definitions
--   Data for FIPS codes
+-   synthetic data for two different exposure definitions
+-   data for FIPS codes
 -   `augsynth` objects
 
 3.  `figures/`
 
--   Plots describing exposure definitions
--   Gap plots
--   Synthetic weight plots
--   Outcome trend plots
+-   plots describing exposure definitions
+-   gap plots
+-   synthetic weight plots
+-   outcome trend plots
 
 4.  `tables/`
 
 -   ATT results
--   Summary diagnostic statistics
+-   summary diagnostic statistics
 
 5.  `report/`
 
@@ -57,4 +57,4 @@ This repository contains the following:
 
 6.  `Makefile`
 
--   File is used to run analyses starting at `08-run-singlesynth.R` and to clean output
+-   file is used to run analyses starting at `08-run-singlesynth.R` and to clean output
