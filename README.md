@@ -14,7 +14,7 @@ For the purposes of speed and privacy, synthetic sample data prepared to be be u
 
 To run the analysis and generate a report:
 
-1.  Check out or download the repository
+1.  Clone or download the repository
 2.  In RStudio's Terminal, navigate to the appropriate home directory
 3.  In Terminal, enter `make clean` to remove the results, then `make singlesynth` to run the augmented synthetic control method, diagnostics, and generate the report
 4.  Results for each exposure-outcome combination will appear in figures and the newly created `tables` and `report` folders
