@@ -1,0 +1,872 @@
+---
+title: "Augmented synthetic control report, single treatment"
+author: "Simone Wien"
+format: 
+  html:
+    embed-resources: true
+    toc: true
+    toc-depth: 4
+editor: visual
+---
+
+```{r}
+#| label: packages
+#| echo: false
+
+pacman::p_load(rio,        # file loading
+               here,       # easy file referencing
+               readr,      # read a fixed width file into a tibble
+               dplyr,      # tidy package
+               tidyr,      # data handling
+               ggplot2,    # plotting 
+               ggpubr,     # arrange multiple plots
+               knitr,      # for table output
+               kableExtra, # table formatting
+               DT)         # interactive table filtering 
+
+
+```
+
+## Overview
+
+This repository provides code and sample data to estimate the effect of single state's policy on birth outcomes using the augmented synthetic control method (ASCM) utilizing the [`augsynth`](https://github.com/ebenmichael/augsynth) package. This report displays select results and their corresponding diagnostic tables and plots. 
+
+The policy exposure in this example is Texas Senate Bill 8 (TX SB 8), a 6 week gestational ban on abortion that went into effect on September 1, 2021. 
+
+**All results are generated using synthetic data and therefore are for educational purposes only.**
+
+## Cohort definition
+
+**Inclusion criteria**
+
+1.  All births and fetal deaths beginning January 1, 2014
+
+**Exclusion criteria**
+
+1.  Singleton births and fetal deaths
+2.  Gestational age $\geq$ 20 weeks
+3.  Removed Connecticut records due to undercounting of fetal deaths
+4.  Removed Virginia due to record quality (maternal morbidity outcomes only, not shown in this report)
+
+## Exposure definitions
+
+### Exposure 1: policy implemented by at least 6 weeks gestation
+
+Pregnancies are **exposed** if, by the date the policy went into effect, the pregnancy was at least 6 weeks gestational age.
+
+-   Pregnancies where the stillbirth or birth occurred before the policy went into effect are **unexposed**
+-   Pregnancies that were under 6 weeks gestational age by the date the policy went into effect are **removed** from the analysis (i.e., only looking at the first cohort of pregnancies)
+
+Due to the nature of preterm births, for this exposure definition observations on or before April 1, 2022 for this analysis need to be removed.
+
+```{r}
+#| label: exposure-1-plot
+#| echo: false
+#| out-width: "100%"
+#| fig-align: "center"
+
+knitr::include_graphics("../figures/exposure-1-definition.png")
+
+```
+
+### Exposure 2: policy implemented at any time during pregnancy
+
+Pregnancies are considered **exposed** if the policy was in effect for any portion of the pregnancy.
+
+-   Pregnancies where the stillbirth or birth occurred before the policy went into effect are **unexposed**
+-   No additional pregnancies are removed
+
+Due to other states receiving the treatment (i.e., causing unbalanced data) the post-treatment period ends at May 1, 2022.
+
+```{r}
+#| label: exposure-2-plot
+#| echo: false
+#| out-width: "100%"
+#| fig-align: "center"
+
+knitr::include_graphics("../figures/exposure-2-definition.png")
+
+```
+
+## Outcomes
+
+1.  Stillbirth rate
+2.  Preterm birth rate, conventional approach: live births are only included in the denominator
+3.  Preterm birth rate, ["fetus-at-risk approach"](https://pubmed.ncbi.nlm.nih.gov/28742216/): live births and stillbirths are included in the denominator
+
+## Time-varying confounders
+
+1.  State Medicaid expansion
+2.  State proportion of pregnancies where maternal age $\geq$ 35 at the time of the stillbirth or birth
+
+## Results and ASCM diagnostics
+
+### Exposure 1: policy implemented by at least 6 weeks gestation
+
+#### Stillbirth
+
+```{r}
+#| label: ascm-6-weeks-stillbirth-gap
+#| echo: false
+#| out-width: "100%"
+#| fig-align: "center"
+
+knitr::include_graphics("../figures/gap_plot_6_weeks_fetal_rate.png")
+
+```
+
+```{r}
+#| label: 6-weeks-stillbirth-outcome-trend
+#| echo: false
+#| warning: false
+#| fig-align: "center"
+
+knitr::include_graphics("../figures/outcome_plot_6_weeks_fetal_rate.png")
+
+
+```
+
+```{r}
+#| label: 6-weeks-stillbirth-weight-absolute
+#| echo: false
+#| out-width: "125%"
+#| fig-align: "center"
+
+knitr::include_graphics("../figures/weight_plot_6_weeks_fetal_rate_absolute.png")
+
+```
+
+```{r}
+#| label: 6-weeks-stillbirth-weight-proportional
+#| echo: false
+#| out-width: "200%"
+#| fig-align: "center"
+
+knitr::include_graphics("../figures/weight_plot_6_weeks_fetal_rate_proportional.png")
+
+```
+
+```{r}
+#| label: 6-weeks-stillbirth-att
+#| echo: false
+
+data <- import(here::here("..", "tables", "att_6_weeks_fetal_rate.xlsx"))
+
+kable(data, 
+      caption = "Stillbirth ATT",
+      col.names = c("Time",
+                    "Estimate",
+                    "Lower CI",
+                    "Upper CI",
+                    "p value"),
+      digits = 3) %>%
+  kable_styling(bootstrap_options = c("striped", "hover"),
+                 full_width = TRUE)
+
+```
+
+```{r}
+#| label: 6-weeks-stillbirth-summary
+#| echo: false
+
+data <- import(here::here("..", "tables", "summary_6_weeks_fetal_rate.xlsx"))
+
+kable(data, 
+      caption = "Stillbirth observed and synthetic summary",
+      col.names = c("Period", "Months", "Mean", "SE", "Lower CI", "Upper CI",
+                    "Mean", "SE", "Lower CI", "Upper CI"),
+      digits = 3) %>%
+  kable_styling(bootstrap_options = c("striped", "hover"), full_width = TRUE) %>%
+  add_header_above(c(" " = 2, "Observed" = 4, "Synthetic" = 4))
+
+
+
+
+```
+
+```{r}
+#| label: 6-week-stillbirth-weights-table
+#| echo: false
+
+data <- import(here::here("..", "tables", "weights_6_weeks_fetal_rate.xlsx")) %>%
+  select(NAME, V1, abs_V1, proportion)
+
+datatable(data,
+          caption = "Stillbirth synthetic control weights",
+          class = "display",
+          colnames = c("State",
+                    "Weight",
+                    "Weight, absolute value",
+                    "Proportion"),
+          escape = TRUE,
+          style = "auto", 
+          width = NULL, 
+          height = NULL,
+          options = list(
+            dom = 't',  # position the table title at the top
+            initComplete = JS(
+              "function(settings, json) {",
+              "$('caption').css('caption-side', 'top');",
+              "}"
+            )
+          )) %>%
+  formatRound(columns = c("V1", "abs_V1", "proportion"), digits = 3)
+
+```
+
+```{r}
+#| label: 6-weeks-stillbirth-rmse
+#| echo: false
+
+data <- import(here::here("..", "tables", "rmse_6_weeks_fetal_rate.xlsx"))
+
+kable(data, 
+      caption = "Stillbirth RMSE",
+      col.names = c("Average ATT",
+                    "Pretreatment RMSE"),
+      digits = 3) %>%
+  kable_styling(bootstrap_options = c("striped", "hover"),
+                 full_width = TRUE)
+
+```
+
+#### Preterm birth, conventional approach
+
+```{r}
+#| label: ascm-6-weeks-ptb-gap
+#| echo: false
+#| out-width: "100%"
+#| fig-align: "center"
+
+knitr::include_graphics("../figures/gap_plot_6_weeks_ptb_rate.png")
+
+```
+
+```{r}
+#| label: 6-weeks-ptb-outcome-trend
+#| echo: false
+#| fig-align: "center"
+
+knitr::include_graphics("../figures/outcome_plot_6_weeks_ptb_rate.png")
+
+```
+
+```{r}
+#| label: 6-weeks-ptb-weight-absolute
+#| echo: false
+#| out-width: "125%"
+#| fig-align: "center"
+
+knitr::include_graphics("../figures/weight_plot_6_weeks_ptb_rate_absolute.png")
+
+```
+
+```{r}
+#| label: 6-weeks-ptb-weight-proportional
+#| echo: false
+#| out-width: "200%"
+#| fig-align: "center"
+
+knitr::include_graphics("../figures/weight_plot_6_weeks_ptb_rate_proportional.png")
+
+```
+
+```{r}
+#| label: 6-weeks-ptb-att
+#| echo: false
+
+data <- import(here::here("..", "tables", "att_6_weeks_ptb_rate.xlsx"))
+
+kable(data, 
+      caption = "PTB ATT",
+      col.names = c("Time",
+                    "Estimate",
+                    "Lower CI",
+                    "Upper CI",
+                    "p value"),
+      digits = 3) %>%
+  kable_styling(bootstrap_options = c("striped", "hover"),
+                 full_width = TRUE)
+
+```
+
+```{r}
+#| label: 6-weeks-ptb-summary
+#| echo: false
+
+data <- import(here::here("..", "tables", "summary_6_weeks_ptb_rate.xlsx"))
+
+kable(data, 
+      caption = "PTB summary",
+      col.names = c("Period",
+                    "Time Points",
+                    "Observed mean",
+                    "Observed SE",
+                    "Observed Lower CI",
+                    "Observed Upper CI",
+                    "Synthetic mean",
+                    "Synthetic SE",
+                    "Synthetic Lower CI",
+                    "Synthetic Upper CI"),
+      digits = 3) %>%
+  kable_styling(bootstrap_options = c("striped", "hover"),
+                 full_width = TRUE)
+
+```
+
+```{r}
+#| label: 6-week-ptb-weights-table
+#| echo: false
+
+data <- import(here::here("..", "tables", "weights_6_weeks_ptb_rate.xlsx")) %>%
+  select(NAME, V1, abs_V1, proportion)
+
+datatable(data,
+          caption = "PTB synthetic control weights",
+          class = "display",
+          colnames = c("State",
+                    "Weight",
+                    "Weight, absolute value",
+                    "Proportion"),
+          escape = TRUE,
+          style = "auto", 
+          width = NULL, 
+          height = NULL,
+          options = list(
+            dom = 't',  # position the table title at the top
+            initComplete = JS(
+              "function(settings, json) {",
+              "$('caption').css('caption-side', 'top');",
+              "}"
+            )
+          )) %>%
+  formatRound(columns = c("V1", "abs_V1", "proportion"), digits = 3)
+
+```
+
+```{r}
+#| label: 6-weeks-ptb-rmse
+#| echo: false
+
+data <- import(here::here("..", "tables", "rmse_6_weeks_ptb_rate.xlsx"))
+
+kable(data, 
+      caption = "PTB RMSE",
+      col.names = c("Average ATT",
+                    "Pretreatment RMSE"),
+      digits = 3) %>%
+  kable_styling(bootstrap_options = c("striped", "hover"),
+                 full_width = TRUE)
+
+```
+
+#### Preterm birth, fetus-at-risk approach
+
+```{r}
+#| label: ascm-6-weeks-ptb-far-gap
+#| echo: false
+#| out-width: "100%"
+#| fig-align: "center"
+
+knitr::include_graphics("../figures/gap_plot_6_weeks_ptb_far_rate.png")
+
+```
+
+```{r}
+#| label: 6-weeks-ptb-far-outcome-trend
+#| echo: false
+#| fig-align: "center"
+
+knitr::include_graphics("../figures/outcome_plot_6_weeks_ptb_far_rate.png")
+
+```
+
+```{r}
+#| label: 6-weeks-ptb-far-weight-absolute
+#| echo: false
+#| out-width: "125%"
+#| fig-align: "center"
+
+knitr::include_graphics("../figures/weight_plot_6_weeks_ptb_far_rate_absolute.png")
+
+```
+
+```{r}
+#| label: 6-weeks-ptb-far-weight-proportional
+#| echo: false
+#| out-width: "200%"
+#| fig-align: "center"
+
+knitr::include_graphics("../figures/weight_plot_6_weeks_ptb_far_rate_proportional.png")
+
+```
+
+```{r}
+#| label: 6-weeks-ptb-far-att
+#| echo: false
+
+data <- import(here::here("..", "tables", "att_6_weeks_ptb_far_rate.xlsx"))
+
+kable(data, 
+      caption = "PTB FAR ATT",
+      col.names = c("Time",
+                    "Estimate",
+                    "Lower CI",
+                    "Upper CI",
+                    "p value"),
+      digits = 3) %>%
+  kable_styling(bootstrap_options = c("striped", "hover"),
+                 full_width = TRUE)
+
+```
+
+```{r}
+#| label: 6-weeks-ptb-far-summary
+#| echo: false
+
+data <- import(here::here("..", "tables", "summary_6_weeks_ptb_far_rate.xlsx"))
+
+kable(data, 
+      caption = "PTB FAR summary",
+      col.names = c("Period",
+                    "Time Points",
+                    "Observed mean",
+                    "Observed SE",
+                    "Observed Lower CI",
+                    "Observed Upper CI",
+                    "Synthetic mean",
+                    "Synthetic SE",
+                    "Synthetic Lower CI",
+                    "Synthetic Upper CI"),
+      digits = 3) %>%
+  kable_styling(bootstrap_options = c("striped", "hover"),
+                 full_width = TRUE)
+
+```
+
+```{r}
+#| label: 6-week-stillbirth-ptb-far-table
+#| echo: false
+
+data <- import(here::here("..", "tables", "weights_6_weeks_ptb_far_rate.xlsx")) %>%
+  select(NAME, V1, abs_V1, proportion)
+
+datatable(data,
+          caption = "PTB FAR synthetic control weights",
+          class = "display",
+          colnames = c("State",
+                    "Weight",
+                    "Weight, absolute value",
+                    "Proportion"),
+          escape = TRUE,
+          style = "auto", 
+          width = NULL, 
+          height = NULL,
+          options = list(
+            dom = 't',  # position the table title at the top
+            initComplete = JS(
+              "function(settings, json) {",
+              "$('caption').css('caption-side', 'top');",
+              "}"
+            )
+          )) %>%
+  formatRound(columns = c("V1", "abs_V1", "proportion"), digits = 3)
+
+```
+
+```{r}
+#| label: 6-weeks-ptb-far-rmse
+#| echo: false
+
+data <- import(here::here("..", "tables", "rmse_6_weeks_ptb_far_rate.xlsx"))
+
+kable(data, 
+      caption = "PTB FAR RMSE",
+      col.names = c("Average ATT",
+                    "Pretreatment RMSE"),
+      digits = 3) %>%
+  kable_styling(bootstrap_options = c("striped", "hover"),
+                 full_width = TRUE)
+
+```
+
+### Exposure 2: policy implemented at any point in pregnancy
+
+#### Stillbirth
+
+```{r}
+#| label: ascm-any-stillbirth-gap
+#| echo: false
+#| out-width: "100%"
+#| fig-align: "center"
+
+knitr::include_graphics("../figures/gap_plot_any_fetal_rate.png")
+
+```
+
+```{r}
+#| label: any-stillbirth-outcome-trend
+#| echo: false
+#| warning: false
+#| fig-align: "center"
+
+knitr::include_graphics("../figures/outcome_plot_any_fetal_rate.png")
+
+```
+
+```{r}
+#| label: any-stillbirth-weight-absolute
+#| echo: false
+#| out-width: "125%"
+#| fig-align: "center"
+
+knitr::include_graphics("../figures/weight_plot_any_fetal_rate_absolute.png")
+
+```
+
+```{r}
+#| label: any-stillbirth-weight-proportional
+#| echo: false
+#| out-width: "200%"
+#| fig-align: "center"
+
+knitr::include_graphics("../figures/weight_plot_any_fetal_rate_proportional.png")
+
+```
+
+```{r}
+#| label: any-stillbirth-att
+#| echo: false
+
+data <- import(here::here("..", "tables", "att_any_fetal_rate.xlsx"))
+
+kable(data, 
+      caption = "Stillbirth ATT",
+      col.names = c("Time",
+                    "Estimate",
+                    "Lower CI",
+                    "Upper CI",
+                    "p value"),
+      digits = 3) %>%
+  kable_styling(bootstrap_options = c("striped", "hover"),
+                 full_width = TRUE)
+
+```
+
+```{r}
+#| label: any-stillbirth-summary
+#| echo: false
+
+data <- import(here::here("..", "tables", "summary_any_fetal_rate.xlsx"))
+
+kable(data, 
+      caption = "Stillbirth observed and synthetic summary",
+      col.names = c("Period", "Months", "Mean", "SE", "Lower CI", "Upper CI",
+                    "Mean", "SE", "Lower CI", "Upper CI"),
+      digits = 3) %>%
+  kable_styling(bootstrap_options = c("striped", "hover"), full_width = TRUE) %>%
+  add_header_above(c(" " = 2, "Observed" = 4, "Synthetic" = 4))
+
+
+
+
+```
+
+```{r}
+#| label: any-stillbirth-weights-table
+#| echo: false
+
+data <- import(here::here("..", "tables", "weights_any_fetal_rate.xlsx")) %>%
+  select(NAME, V1, abs_V1, proportion)
+
+datatable(data,
+          caption = "Stillbirth synthetic control weights",
+          class = "display",
+          colnames = c("State",
+                    "Weight",
+                    "Weight, absolute value",
+                    "Proportion"),
+          escape = TRUE,
+          style = "auto", 
+          width = NULL, 
+          height = NULL,
+          options = list(
+            dom = 't',  # position the table title at the top
+            initComplete = JS(
+              "function(settings, json) {",
+              "$('caption').css('caption-side', 'top');",
+              "}"
+            )
+          )) %>%
+  formatRound(columns = c("V1", "abs_V1", "proportion"), digits = 3)
+
+```
+
+```{r}
+#| label: any-stillbirth-rmse
+#| echo: false
+
+data <- import(here::here("..", "tables", "rmse_any_fetal_rate.xlsx"))
+
+kable(data, 
+      caption = "Stillbirth RMSE",
+      col.names = c("Average ATT",
+                    "Pretreatment RMSE"),
+      digits = 3) %>%
+  kable_styling(bootstrap_options = c("striped", "hover"),
+                 full_width = TRUE)
+
+```
+
+#### Preterm birth, conventional approach
+
+```{r}
+#| label: ascm-any-ptb-gap
+#| echo: false
+#| out-width: "100%"
+#| fig-align: "center"
+
+knitr::include_graphics("../figures/gap_plot_any_ptb_rate.png")
+
+```
+
+```{r}
+#| label: any-ptb-outcome-trend
+#| echo: false
+#| warning: false
+#| fig-align: "center"
+
+knitr::include_graphics("../figures/outcome_plot_any_ptb_rate.png")
+
+```
+
+```{r}
+#| label: any-ptb-weight-absolute
+#| echo: false
+#| out-width: "125%"
+#| fig-align: "center"
+
+knitr::include_graphics("../figures/weight_plot_any_ptb_rate_absolute.png")
+
+```
+
+```{r}
+#| label: any-ptb-weight-proportional
+#| echo: false
+#| out-width: "200%"
+#| fig-align: "center"
+
+knitr::include_graphics("../figures/weight_plot_any_ptb_rate_proportional.png")
+
+```
+
+```{r}
+#| label: any-ptb-att
+#| echo: false
+
+data <- import(here::here("..", "tables", "att_any_ptb_rate.xlsx"))
+
+kable(data, 
+      caption = "PTB ATT",
+      col.names = c("Time",
+                    "Estimate",
+                    "Lower CI",
+                    "Upper CI",
+                    "p value"),
+      digits = 3) %>%
+  kable_styling(bootstrap_options = c("striped", "hover"),
+                 full_width = TRUE)
+
+```
+
+```{r}
+#| label: any-ptb-summary
+#| echo: false
+
+data <- import(here::here("..", "tables", "summary_any_ptb_rate.xlsx"))
+
+kable(data, 
+      caption = "PTB observed and synthetic summary",
+      col.names = c("Period", "Months", "Mean", "SE", "Lower CI", "Upper CI",
+                    "Mean", "SE", "Lower CI", "Upper CI"),
+      digits = 3) %>%
+  kable_styling(bootstrap_options = c("striped", "hover"), full_width = TRUE) %>%
+  add_header_above(c(" " = 2, "Observed" = 4, "Synthetic" = 4))
+
+
+
+
+```
+
+```{r}
+#| label: any-ptb-weights-table
+#| echo: false
+
+data <- import(here::here("..", "tables", "weights_any_ptb_rate.xlsx")) %>%
+  select(NAME, V1, abs_V1, proportion)
+
+datatable(data,
+          caption = "PTB synthetic control weights",
+          class = "display",
+          colnames = c("State",
+                    "Weight",
+                    "Weight, absolute value",
+                    "Proportion"),
+          escape = TRUE,
+          style = "auto", 
+          width = NULL, 
+          height = NULL,
+          options = list(
+            dom = 't',  # position the table title at the top
+            initComplete = JS(
+              "function(settings, json) {",
+              "$('caption').css('caption-side', 'top');",
+              "}"
+            )
+          )) %>%
+  formatRound(columns = c("V1", "abs_V1", "proportion"), digits = 3)
+
+```
+
+```{r}
+#| label: any-ptb-rmse
+#| echo: false
+
+data <- import(here::here("..", "tables", "rmse_any_ptb_rate.xlsx"))
+
+kable(data, 
+      caption = "PTB RMSE",
+      col.names = c("Average ATT",
+                    "Pretreatment RMSE"),
+      digits = 3) %>%
+  kable_styling(bootstrap_options = c("striped", "hover"),
+                 full_width = TRUE)
+
+```
+
+#### Preterm birth, fetus-at-risk approach
+
+```{r}
+#| label: ascm-any-ptb-far-gap
+#| echo: false
+#| out-width: "100%"
+#| fig-align: "center"
+
+knitr::include_graphics("../figures/gap_plot_any_ptb_far_rate.png")
+
+```
+
+```{r}
+#| label: any-ptb-far-outcome-trend
+#| echo: false
+#| warning: false
+#| fig-align: "center"
+
+knitr::include_graphics("../figures/outcome_plot_any_ptb_far_rate.png")
+
+```
+
+```{r}
+#| label: any-ptb-far-weight-absolute
+#| echo: false
+#| out-width: "125%"
+#| fig-align: "center"
+
+knitr::include_graphics("../figures/weight_plot_any_ptb_far_rate_absolute.png")
+
+```
+
+```{r}
+#| label: any-ptb-far-weight-proportional
+#| echo: false
+#| out-width: "200%"
+#| fig-align: "center"
+
+knitr::include_graphics("../figures/weight_plot_any_ptb_far_rate_proportional.png")
+
+```
+
+```{r}
+#| label: any-ptb-far-att
+#| echo: false
+
+data <- import(here::here("..", "tables", "att_any_ptb_far_rate.xlsx"))
+
+kable(data, 
+      caption = "PTB FAR ATT",
+      col.names = c("Time",
+                    "Estimate",
+                    "Lower CI",
+                    "Upper CI",
+                    "p value"),
+      digits = 3) %>%
+  kable_styling(bootstrap_options = c("striped", "hover"),
+                 full_width = TRUE)
+
+```
+
+```{r}
+#| label: any-ptb-far-summary
+#| echo: false
+
+data <- import(here::here("..", "tables", "summary_any_ptb_far_rate.xlsx"))
+
+kable(data, 
+      caption = "PTB FAR observed and synthetic summary",
+      col.names = c("Period", "Months", "Mean", "SE", "Lower CI", "Upper CI",
+                    "Mean", "SE", "Lower CI", "Upper CI"),
+      digits = 3) %>%
+  kable_styling(bootstrap_options = c("striped", "hover"), full_width = TRUE) %>%
+  add_header_above(c(" " = 2, "Observed" = 4, "Synthetic" = 4))
+
+
+
+
+```
+
+```{r}
+#| label: any-ptb-far-weights-table
+#| echo: false
+
+data <- import(here::here("..", "tables", "weights_any_ptb_far_rate.xlsx")) %>%
+  select(NAME, V1, abs_V1, proportion)
+
+datatable(data,
+          caption = "PTB FAR synthetic control weights",
+          class = "display",
+          colnames = c("State",
+                    "Weight",
+                    "Weight, absolute value",
+                    "Proportion"),
+          escape = TRUE,
+          style = "auto", 
+          width = NULL, 
+          height = NULL,
+          options = list(
+            dom = 't',  # position the table title at the top
+            initComplete = JS(
+              "function(settings, json) {",
+              "$('caption').css('caption-side', 'top');",
+              "}"
+            )
+          )) %>%
+  formatRound(columns = c("V1", "abs_V1", "proportion"), digits = 3)
+
+```
+
+```{r}
+#| label: any-ptb-far-rmse
+#| echo: false
+
+data <- import(here::here("..", "tables", "rmse_any_ptb_far_rate.xlsx"))
+
+kable(data, 
+      caption = "PTB FAR RMSE",
+      col.names = c("Average ATT",
+                    "Pretreatment RMSE"),
+      digits = 3) %>%
+  kable_styling(bootstrap_options = c("striped", "hover"),
+                 full_width = TRUE)
+
+```
+
