@@ -1,3 +1,5 @@
+# creates two different datasets (one for each exposure definition) formatted correctly for the augsynth package
+
 # packages
 pacman::p_load(rio,        # file loading
                here,       # easy file referencing

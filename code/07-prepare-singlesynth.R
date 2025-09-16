@@ -1,3 +1,5 @@
+# filters each exposure dataset based on features of the exposure definition
+
 # packages
 pacman::p_load(rio,        # file loading
                here,       # easy file referencing

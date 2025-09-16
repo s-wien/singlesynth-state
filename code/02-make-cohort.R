@@ -1,3 +1,5 @@
+# applies inclusion, exlusion criteria for analysis
+
 # packages
 pacman::p_load(rio,        # file loading
                here,       # easy file referencing

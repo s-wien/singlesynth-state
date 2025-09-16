@@ -1,3 +1,5 @@
+# creates covariate variables and indicators
+
 # packages
 pacman::p_load(rio,        # file loading
                here,       # easy file referencing

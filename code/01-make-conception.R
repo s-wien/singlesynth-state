@@ -1,3 +1,5 @@
+# creates calendar dates for estimated conception and gestational age at 6 weeks
+
 # packages
 pacman::p_load(rio,        # file loading
                here,       # easy file referencing

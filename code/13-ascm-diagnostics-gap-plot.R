@@ -1,3 +1,5 @@
+# creates gap (results) plot for each exposure-outcome combination
+
 # packages
 pacman::p_load(rio,        # file loading
                here,       # easy file referencing

@@ -1,3 +1,5 @@
+# passes data through the augsynth package for each combination of exposure-outcomes
+
 # packages
 pacman::p_load(rio,        # file loading
                here,       # easy file referencing

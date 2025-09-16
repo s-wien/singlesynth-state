@@ -1,3 +1,5 @@
+# creates exposure variables
+
 # packages
 pacman::p_load(rio,        # file loading
                here,       # easy file referencing

@@ -1,3 +1,5 @@
+# creates outcome indidicator variables (rates are calculated at a later step)
+
 # packages
 pacman::p_load(rio,        # file loading
                here,       # easy file referencing

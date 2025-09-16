@@ -1,3 +1,5 @@
+# creates the .html report from quarto
+
 # packages
 pacman::p_load(quarto,     # render document
                here,       # easy file referencing
