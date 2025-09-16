@@ -30,7 +30,8 @@ This repository contains the following:
 -   Prepares data for the `augsynth` package
 -   Runs ASCM diagnostics
 -   Generates a report
--   code `01-08` assumes individual-level birth and fetal death data (e.g., NVSS vital records)
+-   Code `01-07` assumes individual-level birth and fetal death data (e.g., NVSS vital records)
+-   Code `08-15` assumes data aggregated by treatment, time, and state
 
 2.  `data/`
 
