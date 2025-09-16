@@ -29,9 +29,9 @@ pacman::p_load(rio,        # file loading
 
 ## Overview
 
-This repository provides code and sample data to estimate the effect of single state's policy on birth outcomes using the augmented synthetic control method (ASCM) utilizing the [`augsynth`](https://github.com/ebenmichael/augsynth) package. This report displays select results and their corresponding diagnostic tables and plots. 
+This repository provides code and sample data to estimate the effect of single state's policy on birth outcomes using the augmented synthetic control method (ASCM) utilizing the [`augsynth`](https://github.com/ebenmichael/augsynth) package. This report displays select results and their corresponding diagnostic tables and plots.
 
-The policy exposure in this example is Texas Senate Bill 8 (TX SB 8), a 6 week gestational ban on abortion that went into effect on September 1, 2021. 
+The policy exposure in this example is Texas Senate Bill 8 (TX SB 8), a 6 week gestational ban on abortion that went into effect on September 1, 2021.
 
 **All results are generated using synthetic data and therefore are for educational purposes only.**
 
@@ -150,7 +150,7 @@ knitr::include_graphics("../figures/weight_plot_6_weeks_fetal_rate_proportional.
 #| label: 6-weeks-stillbirth-att
 #| echo: false
 
-data <- import(here::here("..", "tables", "att_6_weeks_fetal_rate.xlsx"))
+data <- import("../tables/att_6_weeks_fetal_rate.xlsx")
 
 kable(data, 
       caption = "Stillbirth ATT",
@@ -169,7 +169,7 @@ kable(data,
 #| label: 6-weeks-stillbirth-summary
 #| echo: false
 
-data <- import(here::here("..", "tables", "summary_6_weeks_fetal_rate.xlsx"))
+data <- import("../tables/summary_6_weeks_fetal_rate.xlsx")
 
 kable(data, 
       caption = "Stillbirth observed and synthetic summary",
@@ -188,7 +188,7 @@ kable(data,
 #| label: 6-week-stillbirth-weights-table
 #| echo: false
 
-data <- import(here::here("..", "tables", "weights_6_weeks_fetal_rate.xlsx")) %>%
+data <- import("../tables/weights_6_weeks_fetal_rate.xlsx") %>%
   select(NAME, V1, abs_V1, proportion)
 
 datatable(data,
@@ -218,7 +218,7 @@ datatable(data,
 #| label: 6-weeks-stillbirth-rmse
 #| echo: false
 
-data <- import(here::here("..", "tables", "rmse_6_weeks_fetal_rate.xlsx"))
+data <- import("../tables/rmse_6_weeks_fetal_rate.xlsx")
 
 kable(data, 
       caption = "Stillbirth RMSE",
@@ -275,7 +275,7 @@ knitr::include_graphics("../figures/weight_plot_6_weeks_ptb_rate_proportional.pn
 #| label: 6-weeks-ptb-att
 #| echo: false
 
-data <- import(here::here("..", "tables", "att_6_weeks_ptb_rate.xlsx"))
+data <- import("../tables/att_6_weeks_ptb_rate.xlsx")
 
 kable(data, 
       caption = "PTB ATT",
@@ -294,7 +294,7 @@ kable(data,
 #| label: 6-weeks-ptb-summary
 #| echo: false
 
-data <- import(here::here("..", "tables", "summary_6_weeks_ptb_rate.xlsx"))
+data <- import("../tables/summary_6_weeks_ptb_rate.xlsx")
 
 kable(data, 
       caption = "PTB summary",
@@ -318,7 +318,7 @@ kable(data,
 #| label: 6-week-ptb-weights-table
 #| echo: false
 
-data <- import(here::here("..", "tables", "weights_6_weeks_ptb_rate.xlsx")) %>%
+data <- import("../tables/weights_6_weeks_ptb_rate.xlsx") %>%
   select(NAME, V1, abs_V1, proportion)
 
 datatable(data,
@@ -348,7 +348,7 @@ datatable(data,
 #| label: 6-weeks-ptb-rmse
 #| echo: false
 
-data <- import(here::here("..", "tables", "rmse_6_weeks_ptb_rate.xlsx"))
+data <- import("../tables/rmse_6_weeks_ptb_rate.xlsx")
 
 kable(data, 
       caption = "PTB RMSE",
@@ -405,7 +405,7 @@ knitr::include_graphics("../figures/weight_plot_6_weeks_ptb_far_rate_proportiona
 #| label: 6-weeks-ptb-far-att
 #| echo: false
 
-data <- import(here::here("..", "tables", "att_6_weeks_ptb_far_rate.xlsx"))
+data <- import("../tables/att_6_weeks_ptb_far_rate.xlsx")
 
 kable(data, 
       caption = "PTB FAR ATT",
@@ -424,7 +424,7 @@ kable(data,
 #| label: 6-weeks-ptb-far-summary
 #| echo: false
 
-data <- import(here::here("..", "tables", "summary_6_weeks_ptb_far_rate.xlsx"))
+data <- import("../tables/summary_6_weeks_ptb_far_rate.xlsx")
 
 kable(data, 
       caption = "PTB FAR summary",
@@ -448,7 +448,7 @@ kable(data,
 #| label: 6-week-stillbirth-ptb-far-table
 #| echo: false
 
-data <- import(here::here("..", "tables", "weights_6_weeks_ptb_far_rate.xlsx")) %>%
+data <- import("../tables/weights_6_weeks_ptb_far_rate.xlsx") %>%
   select(NAME, V1, abs_V1, proportion)
 
 datatable(data,
@@ -478,7 +478,7 @@ datatable(data,
 #| label: 6-weeks-ptb-far-rmse
 #| echo: false
 
-data <- import(here::here("..", "tables", "rmse_6_weeks_ptb_far_rate.xlsx"))
+data <- import("../tables/rmse_6_weeks_ptb_far_rate.xlsx")
 
 kable(data, 
       caption = "PTB FAR RMSE",
@@ -538,7 +538,7 @@ knitr::include_graphics("../figures/weight_plot_any_fetal_rate_proportional.png"
 #| label: any-stillbirth-att
 #| echo: false
 
-data <- import(here::here("..", "tables", "att_any_fetal_rate.xlsx"))
+data <- import("../tables/att_any_fetal_rate.xlsx")
 
 kable(data, 
       caption = "Stillbirth ATT",
@@ -557,7 +557,7 @@ kable(data,
 #| label: any-stillbirth-summary
 #| echo: false
 
-data <- import(here::here("..", "tables", "summary_any_fetal_rate.xlsx"))
+data <- import("../tables/summary_any_fetal_rate.xlsx")
 
 kable(data, 
       caption = "Stillbirth observed and synthetic summary",
@@ -576,7 +576,7 @@ kable(data,
 #| label: any-stillbirth-weights-table
 #| echo: false
 
-data <- import(here::here("..", "tables", "weights_any_fetal_rate.xlsx")) %>%
+data <- import("../tables/weights_any_fetal_rate.xlsx") %>%
   select(NAME, V1, abs_V1, proportion)
 
 datatable(data,
@@ -606,7 +606,7 @@ datatable(data,
 #| label: any-stillbirth-rmse
 #| echo: false
 
-data <- import(here::here("..", "tables", "rmse_any_fetal_rate.xlsx"))
+data <- import("../tables/rmse_any_fetal_rate.xlsx")
 
 kable(data, 
       caption = "Stillbirth RMSE",
@@ -664,7 +664,7 @@ knitr::include_graphics("../figures/weight_plot_any_ptb_rate_proportional.png")
 #| label: any-ptb-att
 #| echo: false
 
-data <- import(here::here("..", "tables", "att_any_ptb_rate.xlsx"))
+data <- import("../tables/att_any_ptb_rate.xlsx")
 
 kable(data, 
       caption = "PTB ATT",
@@ -683,7 +683,7 @@ kable(data,
 #| label: any-ptb-summary
 #| echo: false
 
-data <- import(here::here("..", "tables", "summary_any_ptb_rate.xlsx"))
+data <- import("../tables/summary_any_ptb_rate.xlsx")
 
 kable(data, 
       caption = "PTB observed and synthetic summary",
@@ -702,7 +702,7 @@ kable(data,
 #| label: any-ptb-weights-table
 #| echo: false
 
-data <- import(here::here("..", "tables", "weights_any_ptb_rate.xlsx")) %>%
+data <- import("../tables/weights_any_ptb_rate.xlsx") %>%
   select(NAME, V1, abs_V1, proportion)
 
 datatable(data,
@@ -732,7 +732,7 @@ datatable(data,
 #| label: any-ptb-rmse
 #| echo: false
 
-data <- import(here::here("..", "tables", "rmse_any_ptb_rate.xlsx"))
+data <- import("../tables/rmse_any_ptb_rate.xlsx")
 
 kable(data, 
       caption = "PTB RMSE",
@@ -790,7 +790,7 @@ knitr::include_graphics("../figures/weight_plot_any_ptb_far_rate_proportional.pn
 #| label: any-ptb-far-att
 #| echo: false
 
-data <- import(here::here("..", "tables", "att_any_ptb_far_rate.xlsx"))
+data <- import("../tables/att_any_ptb_far_rate.xlsx")
 
 kable(data, 
       caption = "PTB FAR ATT",
@@ -809,7 +809,7 @@ kable(data,
 #| label: any-ptb-far-summary
 #| echo: false
 
-data <- import(here::here("..", "tables", "summary_any_ptb_far_rate.xlsx"))
+data <- import("../tables/summary_any_ptb_far_rate.xlsx")
 
 kable(data, 
       caption = "PTB FAR observed and synthetic summary",
@@ -819,16 +819,13 @@ kable(data,
   kable_styling(bootstrap_options = c("striped", "hover"), full_width = TRUE) %>%
   add_header_above(c(" " = 2, "Observed" = 4, "Synthetic" = 4))
 
-
-
-
 ```
 
 ```{r}
 #| label: any-ptb-far-weights-table
 #| echo: false
 
-data <- import(here::here("..", "tables", "weights_any_ptb_far_rate.xlsx")) %>%
+data <- import("../tables/weights_any_ptb_far_rate.xlsx") %>%
   select(NAME, V1, abs_V1, proportion)
 
 datatable(data,
@@ -858,7 +855,7 @@ datatable(data,
 #| label: any-ptb-far-rmse
 #| echo: false
 
-data <- import(here::here("..", "tables", "rmse_any_ptb_far_rate.xlsx"))
+data <- import("../tables/rmse_any_ptb_far_rate.xlsx")
 
 kable(data, 
       caption = "PTB FAR RMSE",
@@ -869,4 +866,3 @@ kable(data,
                  full_width = TRUE)
 
 ```
-
