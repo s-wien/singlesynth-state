@@ -12,7 +12,9 @@ For the purposes of speed and privacy, synthetic sample data prepared to be be u
 
 # Instructions
 
-To run the analysis and generate a report:
+## Installing the `augsynth` package
+
+## Runing the analysis and generating the report
 
 1.  Clone or download the repository
 2.  In RStudio's Terminal, navigate to the appropriate home directory
@@ -20,7 +22,6 @@ To run the analysis and generate a report:
 4.  Results for each exposure-outcome combination will appear in figures and the newly created `tables` and `report` folders
 5.  To clean results and re-run the analysis, in Terminal enter `make clean` and then `make singlesynth`
 
-## Installing the `augsynth` package
 
 # Organization
 
