@@ -6,7 +6,7 @@
 
 This repository provides code and sample data to estimate the effect of single state's policy on birth outcomes using the augmented synthetic control method (ASCM) utilizing the [`augsynth`](https://github.com/ebenmichael/augsynth) package and to report select results. The policy exposure in this example is Texas Senate Bill 8 (TX SB 8), a 6 week gestational ban on abortion that went into effect on September 1, 2021.
 
-For the purposes of speed and privacy, synthetic sample data prepared to be be used by the [`augsynth`](https://github.com/ebenmichael/augsynth) package is provided (i.e., data have been prepared to begin the analysis at `08-run-singlesynth.R`).
+For the purposes of speed and privacy, synthetic sample data prepared to be used by the [`augsynth`](https://github.com/ebenmichael/augsynth) package is provided (i.e., data have been prepared to begin the analysis at `08-run-singlesynth.R`).
 
 **All results are generated using synthetic data: results do not reflect real trends and are for educational purposes only.**
 
@@ -17,7 +17,7 @@ For the purposes of speed and privacy, synthetic sample data prepared to be be u
 If this is your first time using the [`augsynth`](https://github.com/ebenmichael/augsynth) package, you will need to install it using `devtools`
 
 1.  First make sure `devtools` is installed (`install.packages("devtools")`)
-2.  Then install `augsynth` package from GitHub with `devtools::install_github("ebenmichael/augsynth")`
+2.  Then install the `augsynth` package from GitHub with `devtools::install_github("ebenmichael/augsynth")`
 
 ## Running the analysis and generating the report
 
