@@ -14,6 +14,11 @@ For the purposes of speed and privacy, synthetic sample data prepared to be be u
 
 ## Installing the `augsynth` package
 
+If this is your first time using the [`augsynth`](https://github.com/ebenmichael/augsynth) package, you will need to install it using `devtools`
+
+1.  First make sure `devtools` is installed (`install.packages("devtools")`)
+2.  Then install `augsynth` package from GitHub with `devtools::install_github("ebenmichael/augsynth")`
+
 ## Runing the analysis and generating the report
 
 1.  Clone or download the repository
