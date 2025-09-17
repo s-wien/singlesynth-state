@@ -20,6 +20,8 @@ To run the analysis and generate a report:
 4.  Results for each exposure-outcome combination will appear in figures and the newly created `tables` and `report` folders
 5.  To clean results and re-run the analysis, in Terminal enter `make clean` and then `make singlesynth`
 
+## Installing the `augsynth` package
+
 # Organization
 
 This repository contains the following:
