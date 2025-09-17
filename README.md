@@ -1,6 +1,6 @@
 # Augmented synthetic control analysis, single state policy
 
-## Last updated September 15, 2025
+## Last updated September 16, 2025
 
 # Overview
 
