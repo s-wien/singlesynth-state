@@ -23,7 +23,7 @@ If this is your first time using the [`augsynth`](https://github.com/ebenmichael
 
 1.  Clone or download the repository
 2.  In RStudio's Terminal, navigate to the appropriate home directory
-3.  In Terminal, enter `make clean` to remove the results, then `make singlesynth` to run the augmented synthetic control method, diagnostics, and generate the report
+3.  In Terminal, enter `make clean` to remove the results, then `make singlesynth` to run the augmented synthetic control method, run diagnostics, and generate the report
 4.  Results for each exposure-outcome combination will appear in figures and the newly created `tables` and `report` folders
 5.  To clean results and re-run the analysis, in Terminal enter `make clean` and then `make singlesynth`
 
