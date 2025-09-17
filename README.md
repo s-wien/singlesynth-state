@@ -19,7 +19,7 @@ If this is your first time using the [`augsynth`](https://github.com/ebenmichael
 1.  First make sure `devtools` is installed (`install.packages("devtools")`)
 2.  Then install `augsynth` package from GitHub with `devtools::install_github("ebenmichael/augsynth")`
 
-## Runing the analysis and generating the report
+## Running the analysis and generating the report
 
 1.  Clone or download the repository
 2.  In RStudio's Terminal, navigate to the appropriate home directory
