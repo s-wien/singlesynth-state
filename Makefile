@@ -18,7 +18,7 @@ clean:
 	rm -rf code/report.html
 	rm -rf report/
 	rm -rf tables/
-	# remove all figures except the exposure definition plots (made separetley from this rep)
+	# remove all figures except the exposure definition plots (made separetley from this repo)
 	rm -rf figures/gap*
 	rm -rf figures/weight*
 	rm -rf figures/outcome*
