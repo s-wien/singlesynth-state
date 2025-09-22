@@ -72,8 +72,8 @@ synth_data_treated_6_weeks <- add_numeric_date(synth_data_treated_6_weeks)
 synth_data_treated_any <- add_numeric_date(synth_data_treated_any)
 
 # export data
-rio::export(data, here::here("data", "synth_data_treated_6_weeks.rds"))
-rio::export(data, here::here("data", "synth_data_treated_any.rds"))
+rio::export(synth_data_treated_6_weeks, here::here("data", "synth_data_treated_6_weeks.rds"))
+rio::export(synth_data_treated_any, here::here("data", "synth_data_treated_any.rds"))
 
 # print message when complete
 cat("synth data created")

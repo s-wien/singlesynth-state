@@ -22,11 +22,4 @@ file.copy(from = here::here("code/report.html"),
           to = here::here("report/report.html"), 
           overwrite = TRUE)
 
-# copy supporting libraries for the html report to the report folder
-# need this to preserve html formatting
-#file.copy(from = here::here("code/report_files"), 
- #         to = here::here("report"),
-  #        recursive = TRUE,
-   #       overwrite = TRUE)
-
 print("render report complete")

@@ -10,6 +10,9 @@ pacman::p_load(rio,        # file loading
                augsynth,   # augmented synthetic controls
                ggplot2)    # plotting
 
+# load data
+here::i_am("code/11-ascm-diagnostics-weights.R")
+
 # create list of file names
 ascm_files <- list.files(here::here("data"),          # data folder
                          pattern = "^ascm.*\\.rds$",  # starts with "ascm", is an .rds file
